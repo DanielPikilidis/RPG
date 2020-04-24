@@ -467,6 +467,8 @@ while playing:
                         h = random.random()
                         if h < battle.agility:
                             print("The monster avoided your attack!")
+                            final_damage_player = 0
+                            
                         else:
                             # The final damage of the hit can be +- 30% from the base damage.
                             damage = current_hero.strength
@@ -537,20 +539,26 @@ while playing:
                                 continue
                     print("The monster did {} damage to you({})".format(abs(round(final_damage)), current_hero.health))
                     rounds += 1
-                    battle.health += final_damage_player / 2    # Monster regen every round
+                    battle.health += int(final_damage_player / 2)    # Monster regen every round
                     for i in av_heroes:     # Hero regen every round
-                        i.health += 10
-                        i.magic += 10
+                        if i.health + 10 >= 100:
+                            i.health = 100
+                        else:
+                            i.health += 10
+                        if i.magic + 10 >= 50:
+                            i.magic = 50
+                        else:
+                            i.magic += 10
                 for i in av_heroes:
-                    if i.health + 10 <= 100:
-                        i.health += 10
+                    if i.health < 50:
+                        i.health += 50
                     else:
-                        i.health += (100-i.health)
+                        i.health = 100
 
-                    if i.magic + 10 <= 100:
-                        i.magic += 10
+                    if i.magic < 25:
+                        i.magic += 25
                     else:
-                        i.magic += (100-i.magic)
+                        i.magic = 50
 
     elif choice == "QUIT":
         playing = False
