@@ -152,6 +152,21 @@ def equip_item(cur):
             c = cur.equip(move)
             cur.update_stats()
 
+def unequip_item(cur):
+    cur.open_hotbar()
+    moving = True
+    while moving:
+        move = str(input("Enter a number to move or exit hotbar(\"exit\"): "))
+        while move.upper() not in ["EXIT", "1", "2", "3"]:
+            move = str(input("Input should be valid number or \"exit\": "))
+        if move.upper() == "EXIT":
+            moving = False
+            continue
+        c = current_hero.unequip(move)
+        if c == 1:
+            print("There's no available space in inventory, go to the market and sell something.")
+        else:
+            cur.update_stats()
 
 print("Welcome to this game")
 # Making sure the player gives a valid number
@@ -571,6 +586,6 @@ while playing:
     elif choice == "TUTORIAL":
         tutorial()
     elif choice == "H":
-        current_hero.open_hotbar()
+        unequip_item(current_hero)
 
     choice = str(input("What do you want to do next: "))

@@ -159,6 +159,18 @@ class Hero:
         elif item not in it.armor and item not in it.weapon:
             return 1    # Item not Weapon or Armor, can't be equipped
 
+    def unequip(self, ind):
+        ind = int(ind) - 1
+        item = self.hotbar[ind]
+        if None in self.main:
+            for i in range(len(self.main)):
+                if self.main[i] is None:
+                    self.hotbar[ind], self.main[i] = self.main[i], self.hotbar[ind]
+                    print("Unequipped", item.name)
+                    break
+        else:
+            return 0    # No available space in inventory
+
     def money(self, amount):
         if amount < 0:
             self.coins += amount
