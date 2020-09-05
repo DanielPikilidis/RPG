@@ -130,9 +130,7 @@ class Hero:
                     self.main[ind], self.hotbar[0] = self.hotbar[0], self.main[ind]
                 else:
                     if None in self.main:
-                        for i in range(len(self.main)):
-                            if self.main[i] is None:
-                                ind2 = i
+                        ind2 = self.main.index(None)
                         self.main[ind], self.hotbar[0] = self.hotbar[0], self.main[ind]
                         self.main[ind2], self.hotbar[1] = self.hotbar[1], self.main[ind2]
                         print("Equipped", item.name, "on hotbar slot 1")
@@ -163,11 +161,9 @@ class Hero:
         ind = int(ind) - 1
         item = self.hotbar[ind]
         if None in self.main:
-            for i in range(len(self.main)):
-                if self.main[i] is None:
-                    self.hotbar[ind], self.main[i] = self.main[i], self.hotbar[ind]
-                    print("Unequipped", item.name)
-                    break
+            i = self.main.index(None)
+            self.hotbar[ind], self.main[i] = self.main[i], self.hotbar[ind]
+            print("Unequipped", item.name)
         else:
             return 0    # No available space in inventory
 
