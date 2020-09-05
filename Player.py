@@ -1,4 +1,4 @@
-from RPG import Items as it
+import Items as it
 
 
 class Hero:

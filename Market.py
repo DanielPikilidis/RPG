@@ -1,5 +1,5 @@
-from RPG import Player as pl
-from RPG import Items as it
+import Player as pl
+import Items as it
 
 
 class Shop:
