@@ -1,4 +1,3 @@
-from RPG import Grid as gd
 
 class Monster:
     def __init__(self, name, damage, health, agility, defense, chance):

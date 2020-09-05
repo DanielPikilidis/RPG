@@ -1,4 +1,4 @@
-from RPG import Monster
+import Monster
 import random as r
 
 class Battle:

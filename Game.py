@@ -1,8 +1,8 @@
-from RPG import Player as pl
-from RPG import Grid as gd
-from RPG import Items as it
-from RPG import Market as mk
-from RPG import Battle as bt
+import Player as pl
+import Grid as gd
+import Items as it
+import Market as mk
+import Battle as bt
 import random
 
 """
@@ -16,10 +16,9 @@ def tutorial():
     print("-\"M\" Are the markets, you can go there to buy or sell items.")
     print("-\"X\" Are the unavailable locations, you can't go there.")
     print("-Every time you move into another area there's a chance a monster will spawn.")
-    print("-Areas near the unavailable locations have a higher change of monsters spawning.")
+    print("-You can choose to fight the monsters or run away.")
     print("-If you chose more than 1 hero, you can switch between them by typing \"S\"")
-    print("-Random monsters will appear while you move through the world, you can choose to fight them \nor run away.")
-    print("-During a battle, when your it's your turn to attack, you can type \"cast\" to cast a spell,"
+    print("-During a battle, when it's your turn to attack, you can type \"cast\" to cast a spell,"
           "\"potion\" to \ndrink a potion and \"attack\" to attack with your equipped weapon(s)."
           "\nYou can also \"switch\" to switch heroes or \"stats\" to show your stats.")
     print("-If you kill the monster you will gain exp and coins.")
@@ -30,11 +29,11 @@ def tutorial():
     print("-While in your inventory, you can choose to move items to your hotbar.")
     print("-The hotbar shows you the items you are using.")
     print("-You can always check your stats by typing \"T\".")
-    print("-See what's in your hotbar with \"H\"")
+    print("-See what's in your hotbar with \"H\".")
     print("-Show the map with \"M\".")
     print("-To exit the game type \"quit\".")
-    print("-To show the tutorial again at any time type \"tutorial\"")
-    print("-Clear screen with \"clear\"")
+    print("-To show the tutorial again at any time type \"tutorial\".")
+    print("-Clear screen with \"clear\".")
     print("-Have fun!\n")
 
 
