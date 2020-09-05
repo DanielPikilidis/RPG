@@ -36,12 +36,6 @@ class Potion:
         self.price = price
         self.effect = effect
         self.lvl = lvl
-        """
-        Effects:
-        1: +8 Strength
-        2: +.15 Agility
-        2: +8 Defense
-        """
 
     def view(self, ind):
         n = 17 - len(self.name)
@@ -62,12 +56,6 @@ class Spell:
         self.dmg = dmg
         self.effect = effect
         self.lvl = lvl
-        """
-        Effects:
-        1:  -10 Enemy Strength
-        2:  -10 Enemy Defense
-        3:  -.10 Enemy Agility
-        """
 
     def view(self, ind):
         n = 17 - len(self.name)
