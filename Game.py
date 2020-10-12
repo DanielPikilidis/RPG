@@ -4,6 +4,7 @@ import Items as it
 import Market as mk
 import Battle as bt
 import random
+import os
 
 """
 Tune the player, monster and item stats so it's actually playable.
@@ -38,7 +39,21 @@ def tutorial():
 
 
 def clear_screen():
-    print("\n"*50)
+    if os.name == "posix":
+        os.system('clear')
+    else:
+        os.system('CLS')
+
+
+def check_input(required_input_list):
+    """
+    Instead of using a while loop every time I want to check the user's input, I just
+    give this function the input I want and it returned the correct value.
+    """
+    x = input()
+    while x.upper() not in required_input_list:
+        x = input("Invalid input. Try again: ")
+    return x.upper()
 
 
 def switch_hero(cur, her, hero_lst=None):
@@ -48,24 +63,20 @@ def switch_hero(cur, her, hero_lst=None):
             cur = hero_lst[0]
             print("Using", cur.name)
         elif len(hero_lst) == 2:
-            x = input("Switch to hero 1 or 2? Type 1 or 2: ")
-            while x not in ["1", "2"]:
-                x = str(input("You can only enter 1 for hero1 or 2 for hero2: "))
+            print("Switch to hero 1 or 2? Type 1 or 2:")
+            x = check_input(["1", "2"])
             cur = hero_lst[int(x)-1]
         elif len(hero_lst) == 3:
-            x = input("Switch to hero 1, 2 or 3? Type 1, 2 or 3: ")
-            while x not in ["1", "2", "3"]:
-                x = str(input("You can only enter 1 for hero1 or 2 for hero2: "))
+            print("Switch to hero 1, 2 or 3? Type 1, 2 or 3:")
+            x = check_input(["1", "2", "3"])
             cur = hero_lst[int(x)-1]
         return cur
 
     if her == 1:
         print("You only have 1 hero.")
     elif her == 2:
-        x = input("Switch to hero 1 or 2? Type 1 or 2: ")
-        while x not in ["1", "2"]:
-            x = str(input("You can only enter 1 for hero1 or 2 for hero2: "))
-
+        print("Switch to hero 1 or 2? Type 1 or 2:")
+        x = check_input(["1", "2"])
         x = int(x)
         # Checking if the the requested hero is already equipped and changing him if not
         if x == cur.id == 1:
@@ -79,10 +90,8 @@ def switch_hero(cur, her, hero_lst=None):
             cur = hero2
             print("Switched to", hero2.name)
     elif her == 3:
-        x = str(input("Switch to hero 1, 2 or 3? Type 1, 2 or 3:"))
-        while x not in ["1", "2", "3"]:
-            x = input("You can only enter 1 for hero1, 2 for hero2 or 3 for hero3: ")
-
+        print("Switch to hero 1, 2 or 3? Type 1, 2 or 3:")
+        x = check_input(["1", "2", "3"])
         x = int(x)
         # Checking if the the requested hero is already equipped and changing him if not
         if x == cur.id == 1:
@@ -105,30 +114,26 @@ def switch_hero(cur, her, hero_lst=None):
 
 
 def choose_item():
-    x = str(input("What do you want to buy? Enter number or \"cancel\" to cancel: "))
-    if b == "W":
-        while x.upper() not in ["CANCEL", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]:
-            x = str(input("Your input should be \"cancel\" or a valid number: "))
-    elif b == "A":
-        while x.upper() not in ["CANCEL", "1", "2", "3", "4", "5", "6", "7", "8", "9"]:
-            x = str(input("Your input should be \"cancel\" or a valid number: "))
-    elif b == "P" or b == "S":
-        while x.upper() not in ["CANCEL", "1", "2", "3"]:
-            x = str(input("Your input should be \"cancel\" or a valid number: "))
+    print("What do you want to buy? Enter number or \"cancel\" to cancel: ")
+    if item_to_buy == "W":
+        x = check_input([str(i) for i in range(1, 13)] + ["CANCEL"])
+    elif item_to_buy == "A":
+        x = check_input([str(i) for i in range(1, 10)] + ["CANCEL"])
+    elif item_to_buy == "P" or item_to_buy == "S":
+        x = check_input([str(i) for i in range(1, 4)] + ["CANCEL"])
     return x
 
 
 def equip_item(cur):
     cur.open()
-    moving = True
-    while moving:
-        move = str(input("Enter a number to move or exit inventory(\"exit\"): "))
-        while move.upper() not in ["EXIT", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]:
-            move = str(input("Input should be valid number or \"exit\": "))
-        if move.upper() == "EXIT":
-            moving = False
+    equipping = True
+    while equipping:
+        print("Enter a number to move or exit inventory(\"exit\"): ")
+        item_to_equip = check_input([str(i) for i in range(1, 11)] + ["EXIT"])
+        if item_to_equip.upper() == "EXIT":
+            equipping = False
             continue
-        c = current_hero.equip(move)
+        c = current_hero.equip(item_to_equip)
         while c == 0 or c == 1:
             if c == 0:
                 print("The weapon you want to use requires 2 hands.")
@@ -136,29 +141,27 @@ def equip_item(cur):
                 print("Your inventory is full so the second item you are holding can't go in your inventory.")
             elif c == 1:
                 print("Item is not Weapon or Armor, you don't have to equip it to use it in battle.")
-            move = str(input("Choose another item to move or exit(\"exit\"): "))
-            while move.upper() not in ["EXIT", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]:
-                move = str(input("Input should be valid number or \"exit\": "))
-            if move.upper() == "EXIT":
-                moving = False
+            print("Choose another item to move or exit(\"exit\"): ")
+            item_to_equip = check_input([str(i) for i in range(1, 11)] + ["EXIT"])
+            if item_to_equip.upper() == "EXIT":
+                equipping = False
                 break
-            while int(move) - 1 > len(current_hero.main):
-                move = str(input("Input should be valid number or \"exit\": "))
-                while move.upper() not in ["EXIT", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]:
-                    move = str(input("Input should be valid number or \"exit\": "))
-                if move.upper() == "EXIT":
-                    moving = False
+            while int(item_to_equip) - 1 > len(current_hero.main):
+                item_to_equip = str(input("Input should be valid number or \"exit\": "))
+                item_to_equip = check_input([str(i) for i in range(1, 11)] + ["EXIT"])
+                if item_to_equip.upper() == "EXIT":
+                    equipping = False
                     break
-            c = cur.equip(move)
+            c = cur.equip(item_to_equip)
             cur.update_stats()
+
 
 def unequip_item(cur):
     cur.open_hotbar()
     moving = True
     while moving:
-        move = str(input("Enter a number to move or exit hotbar(\"exit\"): "))
-        while move.upper() not in ["EXIT", "1", "2", "3"]:
-            move = str(input("Input should be valid number or \"exit\": "))
+        print("Enter a number to move or exit hotbar(\"exit\"): ")
+        move = check_input([str(i) for i in range(1, 4)] + ["EXIT"])
         if move.upper() == "EXIT":
             moving = False
             continue
@@ -168,11 +171,11 @@ def unequip_item(cur):
         else:
             cur.update_stats()
 
+
 print("Welcome to this game")
 # Making sure the player gives a valid number
-heroes = str(input("How many heroes do you want? Min:1, Max:3: "))
-while heroes not in ["1", "2", "3"]:
-    heroes = str(input("Input should be valid number: "))
+print("How many heroes do you want? Min:1, Max:3: ")
+heroes = check_input(["1", "2", "3"])
 
 heroes = int(heroes)
 names = []
@@ -184,9 +187,7 @@ for i in range(heroes):
         n = str(input("Name can't be over 10 characters: "))
     while len(n) < 3:
         n = str(input("Name can't be less than 3 characters: "))
-    t = str(input("Hero Type(W=Warrior, S=Sorcerer, P=Paladin): "))
-    while t.upper() not in ["W", "S", "P"]:
-        t = str(input("You can only enter W, S or P:"))
+    t = check_input(["W", "S", "P"])
     t = t.upper()
     names.append(n)
     types.append(t)
@@ -248,69 +249,60 @@ while playing:
         r = grid.move(direction)
         # If there's a market, function will return 1, if there's nothing, return 2
         if r == 1:
-            a = str(input("Do you want to enter the market? Yes/No: "))
-            while a.upper() not in ["YES", "NO"]:
-                a = str(input("You can only say Yes or No: "))
+            print("Do you want to enter the market? Yes/No: ")
+            a = check_input(["YES", "NO"])
             if a.upper() == "YES":
                 in_market = True
                 while in_market:
-                    sb = str(input("Do you want to Buy or Sell? Enter \"B\" or \"S\": "))
-                    while sb.upper() not in ["B", "S"]:
-                        sb = str(input("Input should be \"B\" or \"S\""))
-                    if sb.upper() == "S":
+                    print("Do you want to Buy or Sell? Enter \"B\" or \"S\": ")
+                    sell_or_buy = check_input(["B", "S"])
+                    if sell_or_buy.upper() == "S":
                         current_hero.open()
-                        b = str(input("Enter the number of the item you are willing to sell or cancel: "))
-                        if b.upper() == "CANCEL":
-                            leave = str(input("Do you want to leave the market? Yes/No: "))
-                            while leave.upper() not in ["YES", "NO"]:
-                                leave = str(input("Your input should be Yes or No: "))
+                        item_to_sell = str(input("Enter the number of the item you are willing to sell or cancel: "))
+                        if item_to_sell.upper() == "CANCEL":
+                            print("Do you want to leave the market? Yes/No: ")
+                            leave = check_input(["YES", "NO"])
                             if leave.upper() == "YES":
                                 in_market = False
                                 break
                             else:
                                 continue
-                        while int(b)-1 > len(current_hero.main) and b.upper() != "CANCEL":
-                            b = str(input("You don't have that many items in your inventory. Enter valid "
+                        while int(item_to_sell)-1 > len(current_hero.main) and item_to_sell.upper() != "CANCEL":
+                            item_to_sell = str(input("You don't have that many items in your inventory. Enter valid "
                                           "number or cancel: "))
-                            if b.upper() == "CANCEL":
-                                leave = str(input("Do you want to leave the market? Yes/No: "))
-                                while leave.upper() not in ["YES", "NO"]:
-                                    leave = str(input("Your input should be Yes or No: "))
+                            if item_to_sell.upper() == "CANCEL":
+                                print("Do you want to leave the market? Yes/No: ")
+                                leave = check_input(["YES", "NO"])
                                 if leave.upper() == "YES":
                                     in_market = False
                                     break
                         else:
-                            market.sell(b, current_hero)
-                            leave = str(input("Leave market? Yes/No: "))
-                            while leave.upper() not in ["YES", "NO"]:
-                                leave = str(input("Your input should be Yes or No: "))
+                            market.sell(item_to_sell, current_hero)
+                            print("Leave market? Yes/No: ")
+                            leave = check_input(["YES", "NO"])
                             if leave.upper() == "YES":
                                 in_market = False
                                 break
 
-                    elif sb.upper() == "B":
+                    elif sell_or_buy.upper() == "B":
                         if len(current_hero.main) >= 10 and None not in current_hero.main:
                             print("Your inventory is full, you can't buy any more items. Go back or leave.")
-                            ls = str(input("Go back something or leave: Back/Leave: "))
-                            while ls.upper() not in ["BACK", "LEAVE"]:
-                                ls = str(input("Input should be Back or Leave"))
+                            print("Go back something or leave: Back/Leave: ")
+                            ls = check_input(["BACK", "LEAVE"])
                             if ls.upper() == "BACK":
                                 continue
                             else:
                                 in_market = False
                                 break
-                        b = str(input("What are you looking to buy? W=Weapons, A=Armor, P=Potions, S=Spells: "))
-                        # Too many items on the menu, printing each category separately
-                        while b.upper() not in ["W", "A", "P", "S"]:
-                            b = str(input("You can only enter W, A, P or S: "))
-                        b = b.upper()
-                        if b == "W":
+                        print("What are you looking to buy? W=Weapons, A=Armor, P=Potions, S=Spells: ")
+                        item_to_buy = check_input(["W", "A", "P", "S"])
+                        if item_to_buy == "W":
                             market.weapons()    # Prints all weapons
-                        elif b == "A":
+                        elif item_to_buy == "A":
                             market.armors()
-                        elif b == "P":
+                        elif item_to_buy == "P":
                             market.potions()
-                        elif b == "S":
+                        elif item_to_buy == "S":
                             market.spells()     # Returns all the spells in a list
                             how_many = 0
                             owned = []
@@ -328,30 +320,28 @@ while playing:
 
                         buy = choose_item()
                         if buy.upper() == "CANCEL":
-                            leave = str(input("Do you want to leave the market? Yes/No: "))
-                            while leave.upper() not in ["YES", "NO"]:
-                                leave = str(input("Your input should be Yes or No: "))
+                            print("Do you want to leave the market? Yes/No: ")
+                            leave = check_input(["YES", "NO"])
                             if leave.upper() == "YES":
                                 in_market = False
                                 break
                             else:
                                 continue
                         else:
-                            c = market.buy(b, buy, current_hero)
+                            c = market.buy(item_to_buy, buy, current_hero)
                             if c == 2:
                                 while c == 2 and buy.upper() != "CANCEL":
                                     print("You don't have enough money to buy this item.")
                                     buy = choose_item()
-                                    c = market.buy(b, buy, current_hero)
+                                    c = market.buy(item_to_buy, buy, current_hero)
 
                             if c == 1:
                                 while c == 1 and buy.upper() != "CANCEL":
                                     print("Your level is not high enough for this item.")
                                     buy = choose_item()
-                                    c = market.buy(b, buy, current_hero)
-                        leave = str(input("Leave market? Yes/No: "))
-                        while leave.upper() not in ["YES", "NO"]:
-                            leave = str(input("Your input should be Yes or No: "))
+                                    c = market.buy(item_to_buy, buy, current_hero)
+                        print("Do you want to leave the market? Yes/No: ")
+                        leave = check_input(["YES", "NO"])
                         if leave.upper() == "YES":
                             in_market = False
                             break
@@ -362,9 +352,8 @@ while playing:
             bat = False
             if bt != 1:  # If a monster has appeared
                 print("A", bt.name, "appeared!")
-                ch = str(input("Do you want to fight it? Type Yes/No: "))
-                while ch.upper() not in ["YES", "NO"]:
-                    ch = str(input("Input should be Yes or No: "))
+                print("Do you want to fight it? Type Yes/No: ")
+                ch = check_input(["YES", "NO"])
                 if ch.upper() == "YES":
                     battling = True
                 else:
@@ -388,10 +377,8 @@ while playing:
                         spell_effect_counter += 1
                     if pot_effect_counter != 0:
                         pot_effect_counter += 1
-                    m = str(input("Your move: "))
-                    while m.upper() not in ["CAST", "POTION", "ATTACK", "S", "T", "I"]:
-                        m = str(input("Not valid input: "))
-                    m = m.upper()
+                    print("Your move: ")
+                    m = check_input(["CAST", "POTION", "ATTACK", "S", "T", "I"])
                     if m == "S":
                         current_hero = switch_hero(current_hero, len(av_heroes)-1, av_heroes)
                         rounds -= 1
