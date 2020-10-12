@@ -1,4 +1,3 @@
-
 class Monster:
     def __init__(self, name, damage, health, agility, defense, chance):
         self.name = name

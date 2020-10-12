@@ -16,7 +16,6 @@ class Shop:
         for i in range(len(it.weapon)):
             it.weapon[i].view(i)
 
-
     def armors(self):
         self.items = it.armor
         print("  Name               Price Level Damage")

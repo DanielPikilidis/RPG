@@ -1,6 +1,7 @@
 import Monster
 import random as r
 
+
 class Battle:
     def __init__(self):
         self.mon = Monster.monsters
