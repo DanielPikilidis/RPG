@@ -187,6 +187,7 @@ for i in range(heroes):
         n = str(input("Name can't be over 10 characters: "))
     while len(n) < 3:
         n = str(input("Name can't be less than 3 characters: "))
+    print("Hero Type(W=Warrior, S=Sorcerer, P=Paladin): ")
     t = check_input(["W", "S", "P"])
     t = t.upper()
     names.append(n)
